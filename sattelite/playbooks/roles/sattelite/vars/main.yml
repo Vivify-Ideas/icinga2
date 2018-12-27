@@ -1,0 +1,6 @@
+icinga2_master: false
+icinga2_client: true
+icinga2_ticket_salt: 95543e8cb0759dbb65e87732c1ce3452
+icinga2_master_ip: 192.168.50.1
+icinga2_master_endpoint: "icinga2"
+icinga2_port: 5665

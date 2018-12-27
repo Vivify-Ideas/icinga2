@@ -1,0 +1,58 @@
+---
+- name: Install nagios-plugins
+  apt: name=nagios-plugins state=present
+
+- name: Add Icinga 2 repo key
+  apt_key:
+    url: http://packages.icinga.com/icinga.key
+    state: present
+
+- name: Add Icinga 2 repository
+  apt_repository:
+    repo: deb https://packages.icinga.com/debian icinga-stretch main
+    state: present
+    update_cache: yes
+
+- name: Install Icinga 2
+  apt: name=icinga2  state=present
+
+- name: create cert
+  shell: |
+    icinga2 pki new-cert \
+    --cn {{ inventory_hostname }} \
+    --key /etc/icinga2/pki/{{ inventory_hostname }}.key \
+    --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt
+
+- name: save the masters cert as trustedcert
+  shell: |
+    icinga2 pki save-cert \
+    --key /etc/icinga2/pki/{{ inventory_hostname }}.key \
+    --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt \
+    --trustedcert /etc/icinga2/pki/trusted-master.crt \
+    --host {{ icinga2_master_ip }}
+
+- name: request the certificate from the icinga server
+  shell: |
+    icinga2 pki request \
+    --host {{ icinga2_master_ip }} \
+    --port {{ icinga2_port }} \
+    --ticket {{ inventory_hostname|icinga_ticket(icinga2_ticket_salt) }} \
+    --key /etc/icinga2/pki/{{ inventory_hostname }}.key \
+    --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt \
+    --trustedcert /etc/icinga2/pki/trusted-master.crt --ca /etc/icinga2/pki/ca.key
+
+- name: setup icinga node
+  shell: |
+    icinga2 node setup \
+    --ticket {{ inventory_hostname|icinga_ticket(icinga2_ticket_salt) }} \
+    --cn {{ inventory_hostname }} \
+    --endpoint {{ icinga2_master_endpoint }} \
+    --zone {{ inventory_hostname }} \
+    --parent_host {{ icinga2_master_ip }} \
+    --trustedcert /etc/icinga2/pki/trusted-master.crt \
+    --accept-commands --accept-config
+  become: true
+
+- name: restart icinga service
+  shell: service icinga2 restart
+  become: true

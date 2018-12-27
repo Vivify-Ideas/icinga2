@@ -1,0 +1,4 @@
+# Setup LAMP stack
+---
+- import_tasks: lamp_stack.yml
+  tags: lamp_stack
