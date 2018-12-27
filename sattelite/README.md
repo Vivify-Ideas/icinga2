@@ -1,8 +1,17 @@
-# Ansible monitoring Icinga
+# Client Icinga 2 monitoring created with Ansible playbooks
 
-You can use this repo to create a Vagrant Debian box and provision it using Ansible playbooks to create an Icinga 2 monitoring sattelite.
+# Requirements
+- On the machine which will exectute these playbooks there has to be PBKF2 PIP module installed.
+- ```pip install pbkf2```
+- If you don't have ```pip``` installed you can get it here https://pip.pypa.io/en/stable/installing/  
 
-Ansible will install LAMP stack in the machine as well as Icinga 2 packages and Nagios plugins.
+# Recommendations:
+- If you're on macOS don't install Ansible using ```brew```. Use ```pip``` instead.
+- ```pip install ansible```
 
-You currently need to manually add Icinga 2 master and connect to it.
-Soon, this will be automated.
+# How to use?
+- Create an __inventory__ file and add the IP addresses of computers you wish to execute these playbooks on.
+- Change variables ```playbooks/sattelite/vars/mains.yml```:
+  - ```icinga2_master_ip``` - IP address of the Icinga 2 master server.
+  - ```icinga2_ticket_salt``` - you can get this using ```master/get_master_ticket_salt.sh``` script
+- Run ```ansible-playbook -i hosts playbooks/site.yml``` - assuming you inventory file is named hosts
