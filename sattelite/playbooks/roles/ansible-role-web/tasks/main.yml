@@ -1,4 +1,4 @@
 # Setup LAMP stack
 ---
-- import_tasks: lamp_stack.yml
-  tags: lamp_stack
+- import_tasks: nginx_php.yml
+  tags: nginx_php
