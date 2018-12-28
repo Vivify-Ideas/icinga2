@@ -3,7 +3,7 @@
   become: yes
   remote_user: root
   vars:
-    - php_version: "7.1"
+    - php_version: "7.2"
   roles:
     - role: ansible-role-php-versions
       when: ansible_os_family == 'Debian'
