@@ -1,0 +1,18 @@
+mkdir -p ./data/icinga/cache
+mkdir -p ./data/icinga/certs
+mkdir -p ./data/icinga/etc/icinga2
+mkdir -p ./data/icinga/etc/icingaweb2
+mkdir -p ./data/icinga/lib/icinga
+mkdir -p ./data/icinga/lib/php/sessions
+mkdir -p ./data/icinga/log/apache2
+mkdir -p ./data/icinga/log/icinga2
+mkdir -p ./data/icinga/log/icingaweb2
+mkdir -p ./data/icinga/log/mysql
+mkdir -p ./data/icinga/spool
+
+mkdir -p ./data/graphite/conf
+mkdir -p ./data/graphite/storage
+mkdir -p ./data/graphite/log/graphite
+mkdir -p ./data/graphite/log/carbon
+
+mkdir -p ./data/mysql/data
