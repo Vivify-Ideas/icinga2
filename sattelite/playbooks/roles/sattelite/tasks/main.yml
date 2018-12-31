@@ -19,36 +19,36 @@
 - name: create cert
   shell: |
     icinga2 pki new-cert \
-    --cn {{ inventory_hostname }} \
-    --key /etc/icinga2/pki/{{ inventory_hostname }}.key \
-    --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt
+    --cn {{ icinga2_client_private_ip }} \
+    --key /etc/icinga2/pki/{{ icinga2_client_private_ip }}.key \
+    --cert /etc/icinga2/pki/{{ icinga2_client_private_ip }}.crt
 
 - name: save the masters cert as trustedcert
   shell: |
     icinga2 pki save-cert \
-    --key /etc/icinga2/pki/{{ inventory_hostname }}.key \
-    --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt \
+    --key /etc/icinga2/pki/{{ icinga2_client_private_ip }}.key \
+    --cert /etc/icinga2/pki/{{ icinga2_client_private_ip }}.crt \
     --trustedcert /etc/icinga2/pki/trusted-master.crt \
-    --host {{ icinga2_master_ip }}
+    --host {{ icinga2_master_private_ip }}
 
 - name: request the certificate from the icinga server
   shell: |
     icinga2 pki request \
-    --host {{ icinga2_master_ip }} \
+    --host {{ icinga2_master_private_ip }} \
     --port {{ icinga2_port }} \
-    --ticket {{ inventory_hostname|icinga_ticket(icinga2_ticket_salt) }} \
-    --key /etc/icinga2/pki/{{ inventory_hostname }}.key \
-    --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt \
+    --ticket {{ icinga2_client_private_ip|icinga_ticket(icinga2_ticket_salt) }} \
+    --key /etc/icinga2/pki/{{ icinga2_client_private_ip }}.key \
+    --cert /etc/icinga2/pki/{{ icinga2_client_private_ip }}.crt \
     --trustedcert /etc/icinga2/pki/trusted-master.crt --ca /etc/icinga2/pki/ca.key
 
 - name: setup icinga node
   shell: |
     icinga2 node setup \
-    --ticket {{ inventory_hostname|icinga_ticket(icinga2_ticket_salt) }} \
-    --cn {{ inventory_hostname }} \
+    --ticket {{ icinga2_client_private_ip|icinga_ticket(icinga2_ticket_salt) }} \
+    --cn {{ icinga2_client_private_ip }} \
     --endpoint {{ icinga2_master_endpoint }} \
-    --zone {{ inventory_hostname }} \
-    --parent_host {{ icinga2_master_ip }} \
+    --zone {{ icinga2_client_private_ip }} \
+    --parent_host {{ icinga2_master_private_ip }} \
     --trustedcert /etc/icinga2/pki/trusted-master.crt \
     --accept-commands --accept-config
   become: true
