@@ -47,5 +47,5 @@
 
 - name: Start Icinga2
   service: name=icinga2
-    state=started
+    state=restarted
     enabled=yes
