@@ -19,17 +19,17 @@
 - name: create cert
   shell: |
     icinga2 pki new-cert \
-    --cn {{ ansible_eth1.ipv4.address }} \
-    --key /etc/icinga2/pki/{{ ansible_eth1.ipv4.address }}.key \
-    --cert /etc/icinga2/pki/{{ ansible_eth1.ipv4.address }}.crt
+    --cn {{ ansible_default_ipv4 }} \
+    --key /etc/icinga2/pki/{{ ansible_default_ipv4 }}.key \
+    --cert /etc/icinga2/pki/{{ ansible_default_ipv4 }}.crt
   become: yes
   become_user: root
 
 - name: save the masters cert as trustedcert
   shell: |
     icinga2 pki save-cert \
-    --key /etc/icinga2/pki/{{ ansible_eth1.ipv4.address }}.key \
-    --cert /etc/icinga2/pki/{{ ansible_eth1.ipv4.address }}.crt \
+    --key /etc/icinga2/pki/{{ ansible_default_ipv4 }}.key \
+    --cert /etc/icinga2/pki/{{ ansible_default_ipv4 }}.crt \
     --trustedcert /etc/icinga2/pki/trusted-master.crt \
     --host {{ icinga2_master_private_ip }}
 
@@ -38,18 +38,18 @@
     icinga2 pki request \
     --host {{ icinga2_master_private_ip }} \
     --port {{ icinga2_port }} \
-    --ticket {{ ansible_eth1.ipv4.address|icinga_ticket(icinga2_ticket_salt) }} \
-    --key /etc/icinga2/pki/{{ ansible_eth1.ipv4.address }}.key \
-    --cert /etc/icinga2/pki/{{ ansible_eth1.ipv4.address }}.crt \
+    --ticket {{ ansible_default_ipv4|icinga_ticket(icinga2_ticket_salt) }} \
+    --key /etc/icinga2/pki/{{ ansible_default_ipv4 }}.key \
+    --cert /etc/icinga2/pki/{{ ansible_default_ipv4 }}.crt \
     --trustedcert /etc/icinga2/pki/trusted-master.crt --ca /etc/icinga2/pki/ca.key
 
 - name: setup icinga node
   shell: |
     icinga2 node setup \
-    --ticket {{ ansible_eth1.ipv4.address|icinga_ticket(icinga2_ticket_salt) }} \
-    --cn {{ ansible_eth1.ipv4.address }} \
+    --ticket {{ ansible_default_ipv4|icinga_ticket(icinga2_ticket_salt) }} \
+    --cn {{ ansible_default_ipv4 }} \
     --endpoint {{ icinga2_master_endpoint }} \
-    --zone {{ ansible_eth1.ipv4.address }} \
+    --zone {{ ansible_default_ipv4 }} \
     --parent_host {{ icinga2_master_private_ip }} \
     --trustedcert /etc/icinga2/pki/trusted-master.crt \
     --accept-commands --accept-config
