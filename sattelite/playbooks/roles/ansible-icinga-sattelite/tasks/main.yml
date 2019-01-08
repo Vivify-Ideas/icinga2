@@ -1,12 +1,17 @@
 ---
-- include_tasks: icinga2_Debian.yml
+- import_tasks: icinga2_Debian.yml
   when: (ansible_os_family == 'Debian' and ansible_distribution != 'Ubuntu')
 
-- include_tasks: icinga2_Ubuntu.yml
+- import_tasks: icinga2_Ubuntu.yml
   when: (ansible_os_family == 'Debian' and ansible_distribution == 'Ubuntu')
 
-- include_tasks: icinga2_RedHat.yml
+- import_tasks: icinga2_RedHat.yml
   when: (ansible_os_family == 'RedHat')
+
+- name: chown pki directory
+  file:
+    path: /etc/icinga2/pki
+    group: icinga
 
 - name: create cert
   shell: |
@@ -14,6 +19,8 @@
     --cn {{ ansible_eth1.ipv4.address }} \
     --key /etc/icinga2/pki/{{ ansible_eth1.ipv4.address }}.key \
     --cert /etc/icinga2/pki/{{ ansible_eth1.ipv4.address }}.crt
+  become: yes
+  become_user: root
 
 - name: save the masters cert as trustedcert
   shell: |
