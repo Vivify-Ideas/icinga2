@@ -1,8 +1,8 @@
 # Client Icinga 2 monitoring created with Ansible playbooks
 
 # Requirements
-- On the machine which will exectute these playbooks there has to be PBKF2 PIP module installed.
-- ```pip install pbkf2```
+- On the machine which will exectute these playbooks there has to be PBKDF2 PIP module installed.
+- ```pip install pbkdf2```
 - If you don't have ```pip``` installed you can get it here https://pip.pypa.io/en/stable/installing/  
 
 # Recommendations:
