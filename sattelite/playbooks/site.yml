@@ -2,6 +2,7 @@
 - hosts: all
   become: yes
   remote_user: root
+  strategy: free
   vars:
     - php_version: "7.2"
   roles:
