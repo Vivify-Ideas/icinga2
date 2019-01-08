@@ -1,6 +1,7 @@
 ---
 icinga2_key: "https://packages.icinga.com/icinga.key"
 
+# Debian
 icinga2_deb_repos:
   - {
       repo: "deb https://packages.icinga.com/{{ ansible_distribution|lower }} icinga-{{ ansible_distribution_release }} main",
@@ -12,6 +13,11 @@ icinga2_deb_repos:
 icinga2_pkg:
   - icinga2
   - nagios-plugins
+
+# Redhat
+epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+epel_repo_gpg_key_url: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+epel_repofile_path: "/etc/yum.repos.d/epel.repo"
 
 icinga2_use_public_yum_repo: True
 icinga2_url_yum: "https://packages.icinga.com/epel/ICINGA-release.repo"
