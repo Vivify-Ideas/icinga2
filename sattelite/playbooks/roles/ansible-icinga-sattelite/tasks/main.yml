@@ -12,6 +12,7 @@
   file:
     path: /etc/icinga2/pki
     group: icinga
+  when: (ansible_os_family == 'RedHat')
 
 - name: create cert
   shell: |
