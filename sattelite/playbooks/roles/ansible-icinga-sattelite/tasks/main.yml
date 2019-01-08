@@ -8,9 +8,11 @@
 - import_tasks: icinga2_RedHat.yml
   when: (ansible_os_family == 'RedHat')
 
-- name: chown pki directory
+- name: create pki directory
   file:
     path: /etc/icinga2/pki
+    state: directory
+    owner: icinga
     group: icinga
   when: (ansible_os_family == 'RedHat')
 
