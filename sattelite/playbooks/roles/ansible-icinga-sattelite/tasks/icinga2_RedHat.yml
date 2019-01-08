@@ -8,7 +8,7 @@
     name: "{{ epel_repo_url }}"
     state: present
   register: result
-  until: 'result.rc == 0'
+  until: "result.rc == 0"
   retries: 5
   delay: 10
   when: not epel_repofile_result.stat.exists
@@ -37,13 +37,11 @@
   when: icinga2_use_public_yum_repo
 
 - name: Install Icinga2 on RedHat OS family
-  yum: name={{ item }}
+  yum: name='{{ icinga2_yum }}'
     state=latest
-  with_items: "{{ icinga2_yum }}"
   when: ansible_pkg_mgr == "yum"
 
 - name: Install Icinga2 on RedHat OS family (Fedora > 22)
-  dnf: name={{ item }}
+  dnf: name='{{ icinga2_yum }}'
     state=latest
-  with_items: "{{ icinga2_yum }}"
   when: ansible_pkg_mgr == "dnf"

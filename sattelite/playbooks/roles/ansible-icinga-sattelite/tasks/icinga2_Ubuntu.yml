@@ -26,9 +26,7 @@
 
 - name: Install Icinga2 on Debian OS family
   apt:
-    pkg: ["{{ icinga2_pkg }}"]
+    pkg: "{{ icinga2_pkg }}"
     update_cache: yes
     state: latest
     install_recommends: no
-  with_items:
-    - "{{ icinga2_pkg }}"
